@@ -22,7 +22,7 @@ export function TodoDetailsDialog({ todo, open, onOpenChange, onToggle, onDelete
     
     if (!todo) return null
 
-    const assignedUser = todo.assignedTo ? users.find(u => u.id === todo.assignedTo) : null
+    // const assignedUser = null // todo.assignedTo ? users.find(u => u.id === todo.assignedTo) : null
 
     const priorityColor = {
         low: 'bg-blue-100 text-blue-800',
@@ -77,14 +77,14 @@ export function TodoDetailsDialog({ todo, open, onOpenChange, onToggle, onDelete
                             Priorytet: {priorityLabel[todo.priority]}
                         </Badge>
 
-                        {assignedUser && (
+                        {/* {assignedUser && (
                             <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 text-sm font-medium border-0 bg-secondary/50">
                                 <Avatar className="h-4 w-4">
                                     <AvatarFallback className="text-[8px]">{assignedUser.avatar}</AvatarFallback>
                                 </Avatar>
                                 {assignedUser.name}
                             </Badge>
-                        )}
+                        )} */}
                     </div>
 
                     {/* Description */}

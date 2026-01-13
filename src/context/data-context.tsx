@@ -33,11 +33,11 @@ interface DataContextType {
     // Notes
     addNote: (newNote: Note) => Promise<void>
     updateNote: (noteId: string, updates: Partial<Note>) => Promise<void>
-    deleteNote: (noteId: string) => Promise<{ error: any }>
+    deleteNote: (id: string) => Promise<void>
     
     // Attachments
-    addAttachment: (att: Attachment) => Promise<void>
-    deleteAttachment: (attId: string) => Promise<{ error: any }>
+    addAttachment: (attachment: Omit<Attachment, 'id' | 'uploadDate'>) => Promise<void>
+    deleteAttachment: (id: string) => Promise<void>
     
     // Calendar
     addEvent: (event: Omit<CalendarEvent, 'id'>) => Promise<void>
@@ -116,6 +116,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     }
 
     const updateNote = async (noteId: string, updates: Partial<Note>) => {
+        // @ts-ignore
         const { error } = await supabase.from('notes').update(updates as any).eq('id', noteId)
         
         if (!error) {
@@ -126,36 +127,40 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
-    const deleteNote = async (noteId: string) => {
-        const { error } = await supabase.from('notes').delete().eq('id', noteId)
+    const deleteNote = async (id: string) => {
+        const { error } = await supabase.from('notes').delete().eq('id', id)
         
         if (!error) {
-            setNotes(prev => prev.filter(n => n.id !== noteId))
+            setNotes(prev => prev.filter(n => n.id !== id))
         } else {
             // Mock fallback
-            setNotes(prev => prev.filter(n => n.id !== noteId))
+            setNotes(prev => prev.filter(n => n.id !== id))
         }
-        return { error }
     }
 
     // --- Attachments ---
-    const addAttachment = async (att: Attachment) => {
-        const { error } = await supabase.from('attachments').insert(att as any)
+    const addAttachment = async (attachment: Omit<Attachment, 'id' | 'uploadDate'>) => {
+        const newAttachment: Attachment = {
+            ...attachment,
+            id: Math.random().toString(36).substring(7),
+            uploadDate: new Date().toISOString()
+        }
+
+        const { error } = await supabase.from('attachments').insert(newAttachment as any)
         if (!error) {
-            setAttachments(prev => [att, ...prev])
+            setAttachments(prev => [newAttachment, ...prev])
         } else {
-             setAttachments(prev => [att, ...prev])
+             setAttachments(prev => [newAttachment, ...prev])
         }
     }
 
-    const deleteAttachment = async (attId: string) => {
-        const { error } = await supabase.from('attachments').delete().eq('id', attId)
+    const deleteAttachment = async (id: string) => {
+        const { error } = await supabase.from('attachments').delete().eq('id', id)
         if (!error) {
-             setAttachments(prev => prev.filter(a => a.id !== attId))
+             setAttachments(prev => prev.filter(a => a.id !== id))
         } else {
-             setAttachments(prev => prev.filter(a => a.id !== attId))
+             setAttachments(prev => prev.filter(a => a.id !== id))
         }
-        return { error }
     }
 
     // --- Calendar ---
@@ -201,6 +206,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const todo = todos.find(t => t.id === todoId)
         if (!todo) return
 
+        // @ts-ignore
         const { error } = await supabase.from('todos').update({ completed: !todo.completed }).eq('id', todoId)
         
         if (!error) {

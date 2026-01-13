@@ -59,12 +59,6 @@ export function Sidebar({ className }: SidebarProps) {
             active: pathname === '/calendar'
         },
         {
-            label: 'Dokumenty',
-            icon: Archive,
-            href: '/documents',
-            active: pathname === '/documents'
-        },
-        {
             label: 'Lista zadań',
             icon: ListTodo,
             href: '/todo',

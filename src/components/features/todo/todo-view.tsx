@@ -35,7 +35,7 @@ export function TodoView() {
             completed: false,
             priority: newTodoPriority,
             dueDate: date ? format(date, 'yyyy-MM-dd') : undefined,
-            assignedTo: selectedUser || undefined
+            // assignedTo: selectedUser || undefined
         })
 
         setNewTodoText('')
@@ -261,7 +261,7 @@ export function TodoView() {
                                         </span>
                                     )}
                                 </div>
-                                {todo.assignedTo && (
+                                {/* {todo.assignedTo && (
                                     <div className="flex items-center gap-1.5" title={users.find(u => u.id === todo.assignedTo)?.name}>
                                         <span className="text-[10px] hidden sm:inline-block">
                                             {users.find(u => u.id === todo.assignedTo)?.name.split(' ')[1] || 'Osoba'}
@@ -272,7 +272,7 @@ export function TodoView() {
                                             </AvatarFallback>
                                         </Avatar>
                                     </div>
-                                )}
+                                )} */}
                             </div>
                         </CardContent>
                     </Card>
