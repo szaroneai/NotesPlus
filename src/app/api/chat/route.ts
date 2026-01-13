@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(request: Request) {
   try {
     if (!process.env.OPENAI_API_KEY) {
@@ -13,6 +9,10 @@ export async function POST(request: Request) {
         { status: 503 }
       );
     }
+
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
     const body = await request.json();
     const { message, context } = body;
